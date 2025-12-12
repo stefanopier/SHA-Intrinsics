@@ -44,6 +44,19 @@ uint32_t B2U32(uint8_t val, uint8_t sh)
     return ((uint32_t)val) << sh;
 }
 
+/* Initialize the state for the SHA-256 hash */
+void sha256_init(uint32_t state[8])
+{
+    state[0] = 0x6a09e667;
+    state[1] = 0xbb67ae85;
+    state[2] = 0x3c6ef372;
+    state[3] = 0xa54ff53a;
+    state[4] = 0x510e527f;
+    state[5] = 0x9b05688c;
+    state[6] = 0x1f83d9ab;
+    state[7] = 0x5be0cd19;
+}
+
 /* Process multiple blocks. The caller is responsible for setting the initial */
 /*  state, and the caller is responsible for padding the final block.        */
 void sha256_process(uint32_t state[8], const uint8_t data[], uint32_t length)
@@ -130,10 +143,8 @@ int main(int argc, char* argv[])
     message[0] = 0x80;
 
     /* initial state */
-    uint32_t state[8] = {
-        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
-        0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
-    };
+    uint32_t state[8];
+    sha256_init(state);
 
     sha256_process(state, message, sizeof(message));
 
